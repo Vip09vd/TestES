@@ -1,21 +1,22 @@
 const tbody = document.getElementById('users-body');
-function myCreateFunction() {
-    for (let i = 0; i < 10; i++){
-        var row = tbody.insertRow(0);
-        var cell = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        cell2.innerText = 'address';
-        cell.innerText = name;
-        console.log(name);
-    }
-}
-
-myCreateFunction();
-
 
 function getData(arr) {
-    for (let obj of arr){
-        console.log(obj.name);
-    }
+    let newArr = arr.map(function (person) {
+        let name = person.name;
+        let userName = person.username;
+        let email = person.email;
+        let address = person.address;
+        let phone = person.phone;
+        let website = person.website;
+        let row = tbody.insertRow(0);
+        let nameTd = row.insertCell(0).innerText = name;
+        let userNameTd = row.insertCell(1).innerText = userName;
+        let emailTd = row.insertCell(2).innerText = email;
+        let addressTd = row.insertCell(3).innerText = `${address.street} ${address.suite} ${address.city} ${address.zipcode}`;
+        let phoneTd = row.insertCell(4).innerText = phone;
+        let websiteTd = row.insertCell(5).innerText = website;
+    });
+    console.log(arr);
+    console.log(newArr);
 }
 
