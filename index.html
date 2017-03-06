@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ES6</title>
+    <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
 <h1 align="center">Users</h1>
@@ -18,9 +19,23 @@
     </tr>
     </thead>
     <tbody id="users-body">
-
+        <tr class="create-person hidden">
+            <td><input class="name-field" type="text"></td>
+            <td><input class="username-field" type="text"></td>
+            <td><input class="email-field" type="text"></td>
+            <td><input class="street-field" type="text">
+                <input class="suite-field" type="text">
+                <input class="city-field" type="text">
+                <input class="zipcode-field" type="text">
+            </td>
+            <td><input class="phone-field" type="text"></td>
+            <td><input class="site-field" type="text"></td>
+        </tr>
     </tbody>
 </table>
+<button type="button" onclick="getNewValues()" class="add">add new</button>
+<button type="button" onclick="createNewPerson()" class="save hidden">save</button>
+
 <script src="src/script.js"></script>
 <script src="http://www.mocky.io/v2/58aaea261000003f114b637d?callback=getData"></script>
 </body>
