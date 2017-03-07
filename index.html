@@ -19,24 +19,57 @@
     </tr>
     </thead>
     <tbody id="users-body">
-        <tr class="create-person hidden">
-            <td><input class="name-field" type="text"></td>
-            <td><input class="username-field" type="text"></td>
-            <td><input class="email-field" type="text"></td>
-            <td><input class="street-field" type="text">
-                <input class="suite-field" type="text">
-                <input class="city-field" type="text">
-                <input class="zipcode-field" type="text">
-            </td>
-            <td><input class="phone-field" type="text"></td>
-            <td><input class="site-field" type="text"></td>
-        </tr>
+
     </tbody>
 </table>
-<button type="button" onclick="getNewValues()" class="add">add new</button>
-<button type="button" onclick="createNewPerson()" class="save hidden">save</button>
 
+<div class="modal">
+    <h1 align="center">Create new user</h1>
+    <div class="create-person hidden">
+        <div>
+            <strong>Name</strong>
+            <input class="name-field" type="text">
+        </div>
+        <div>
+            <strong>User Name</strong>
+            <input class="username-field" type="text">
+        </div>
+        <div>
+            <strong>E-mail</strong>
+            <input class="email-field" type="text">
+        </div>
+        <div>
+            <strong>Street</strong>
+            <input class="street-field" type="text">
+        </div>
+
+        <div>
+            <strong>Suite</strong>
+            <input class="suite-field" type="text">
+        </div>
+        <div>
+            <strong>City</strong>
+            <input class="city-field" type="text">
+        </div>
+        <div>
+            <strong>Zipcode</strong>
+            <input class="zipcode-field" type="text">
+        </div>
+        <div>
+            <strong>Phone</strong>
+            <input class="phone-field" type="text">
+        </div>
+        <div>
+            <strong>Website</strong>
+            <input class="site-field" type="text">
+        </div>
+    </div>
+    <button type="button" onclick="getNewValues()" class="add">edit</button>
+    <button type="button" onclick="createNewPerson()" class="save hidden">save</button>
+</div>
+
+<button type="button" onclick="getNewValues()" class="add">edit</button>
+<button type="button" onclick="createNewPerson()" class="save hidden">save</button>
 <script src="src/script.js"></script>
-<script src="http://www.mocky.io/v2/58aaea261000003f114b637d?callback=getData"></script>
 </body>
 </html>

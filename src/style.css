@@ -1,3 +1,28 @@
 .hidden{
     display: none;
 }
+
+.modal{
+    position: fixed;
+    padding: 15px;
+    background-color: #fff;
+    width: 1300px;
+    height: 300px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    top: 100px;
+    left: 99999px;
+    opacity: 0;
+    transition: .5s all;
+}
+
+.modal.visible{
+    left: calc(50% - 650px);
+    opacity: 1;
+}
+
+.create-person div{
+    display: inline-block;
+    width: 33%;
+    vertical-align: middle;
+}
