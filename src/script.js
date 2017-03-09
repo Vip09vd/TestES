@@ -2,6 +2,7 @@ const tbody = document.getElementById('users-body');
 const addBtn = document.getElementsByClassName('add')[0];
 const createPerson = document.getElementsByClassName('create-person')[0];
 const saveBtn = document.getElementsByClassName('save')[0];
+const editBtn = document.getElementsByClassName('edit')[0];
 const modal = document.getElementsByClassName('modal')[0];
 let newName = document.getElementsByClassName('name-field')[0];
 let newUserName = document.getElementsByClassName('username-field')[0];
@@ -33,17 +34,22 @@ function newRowRender(data) {
         let phoneTd = row.insertCell(4).innerText = phone;
         let websiteTd = row.insertCell(5).innerText = website;
         let buttonDel = document.createElement('button');
+        let buttonEdit = document.createElement('button');
         buttonDel.innerText = "Delete";
+        buttonEdit.innerText = "Edit";
         buttonDel.classList.add('delete');
+        buttonEdit.classList.add('edit');
         buttonsTd = row.insertCell(6).appendChild(buttonDel);
+        buttonsTd = row.insertCell(6).appendChild(buttonEdit);
         buttonDel.addEventListener('click', getDeleteListener(person.id));
+        buttonEdit.addEventListener('click', getEditListener(person.id));
     });
 }
 
 function getDeleteListener(id) {
     return function removePerson(e) {
         cache.forEach(function (person, i) {
-            if(id === person.id) {
+            if (id === person.id) {
                 cache.splice(i, 1);
                 document.getElementById(id).remove();
                 console.log(i);
@@ -52,6 +58,48 @@ function getDeleteListener(id) {
         });
     }
 }
+
+let edit;
+
+function getEditListener(id) {
+    return function editPerson() {
+        cache.forEach(function (person, i) {
+            if (id === person.id) {
+                getNewValues();
+                newName.value = person.name;
+                newStreet.value = person.address.street;
+                newSuite.value = person.address.suite;
+                newCity.value = person.address.city;
+                newZipcode.value = person.address.zipcode;
+                newUserName.value = person.username;
+                newEmail.value = person.email;
+                newPhone.value = person.phone;
+                newWebsite.value = person.website;
+                edit = function EditedValues() {
+                    let editedPerson = cache[i] = {
+                        name: newName.value,
+                        id: person.id,
+                        companyId: person.companyId,
+                        address: {
+                            street: newStreet.value,
+                            suite: newSuite.value,
+                            city: newCity.value,
+                            zipcode: newZipcode.value
+                        },
+                        username: newUserName.value,
+                        email: newEmail.value,
+                        phone: newPhone.value,
+                        website: newWebsite.value
+                    };
+                    document.getElementById(id).remove();
+                    newRowRender([editedPerson]);
+                };
+            }
+        })
+    }
+}
+
+getEditListener();
 
 function jsonp(url, callback) {
     let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
@@ -71,9 +119,11 @@ jsonp('http://www.mocky.io/v2/58aaea261000003f114b637d', function (data) {
     newRowRender(cache);
 });
 
+
 function createNewPerson() {
-    let newPerson = [{
-        id: cache.length + 1,
+    let newId = cache[cache.length - 1].id + 1;
+    let newPerson = {
+        id: newId,
         name: newName.value,
         address: {
             street: newStreet.value,
@@ -85,15 +135,17 @@ function createNewPerson() {
         email: newEmail.value,
         phone: newPhone.value,
         website: newWebsite.value
-    }];
-    cache.push(newPerson[0]);
-    newRowRender(newPerson);
+    };
+    cache.push(newPerson);
+    newRowRender([newPerson]);
     console.log(cache);
 }
+
 
 function getNewValues() {
     createPerson.classList.toggle("hidden");
     saveBtn.classList.toggle("hidden");
+    editBtn.classList.toggle("hidden");
     modal.classList.toggle("visible");
     addBtn.innerText = "close";
     (function () {
