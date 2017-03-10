@@ -1,28 +1,152 @@
-.hidden{
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: -0.75px;
+}
+
+.hidden {
     display: none;
 }
 
-.modal{
+
+.modal {
     position: fixed;
-    padding: 15px;
     background-color: #fff;
     width: 1300px;
     height: 300px;
     border-radius: 5px;
-    border: 1px solid #000;
     top: 100px;
     left: 99999px;
     opacity: 0;
     transition: .5s all;
+    box-shadow: 0px 0px 0px 0px;
 }
 
-.modal.visible{
+.modal.visible {
     left: calc(50% - 650px);
     opacity: 1;
+    box-shadow: 5px 5px 15px 0px;
 }
 
-.create-person div{
+.modal-inner {
+    padding: 15px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border: 4px solid #000;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: .6;
+}
+
+.close-btn:before,
+.close-btn:after {
+    position: absolute;
+    width: 20px;
+    height: 4px;
+    display: block;
+    background-color: #000;
+    opacity: .9;
+    top: 50%;
+    margin-top: -2px;
+
+    content: '';
+}
+
+.close-btn:before {
+    transform: rotate(45deg);
+}
+
+.close-btn:after {
+    transform: rotate(-45deg);
+}
+
+.create-person{
+    font-size: 0;
+}
+
+.create-person div {
     display: inline-block;
-    width: 33%;
+    width: 25%;
     vertical-align: middle;
+    box-sizing: border-box;
+    padding: 0 10px;
+    font-size: initial;
+}
+
+button {
+    min-width: 75px;
+    height: 30px;
+    line-height: 20px;
+    border-radius: 5px;
+    border-color: transparent;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+button.primary {
+    background-color: royalblue;
+    color: #fff;
+}
+
+button.danger {
+    background-color: orangered;
+    color: #fff;
+}
+
+button.copy{
+    min-width: 0;
+    height: auto;
+}
+
+thead tr {
+    border-bottom: 1px solid #000;
+}
+
+th {
+    text-align: left;
+}
+
+tr {
+    border-bottom: 1px solid #eee;
+}
+
+th, td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+td:last-child {
+    text-align: center;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+input{
+    border-radius: 3px;
+    height: 24px;
+    width: 100%;
+    border-style: groove;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+h1{
+    margin-top: 0;
+}
+
+.buttons-container{
+    display: block;
+    text-align: center;
+    margin: 5px 0;
 }

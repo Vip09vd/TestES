@@ -16,39 +16,57 @@ let newWebsite = document.getElementsByClassName('site-field')[0];
 let cache;
 let buttonsTd;
 let row;
+let edit;
+let emailTd;
+let takenEmail = document.createElement('input');
+document.body.appendChild(takenEmail);
+takenEmail.style.opacity = 0;
+takenEmail.style.width = '1px';
+
 
 function newRowRender(data) {
     data.forEach(function (person) {
-        let name = person.name;
-        let userName = person.username;
-        let email = person.email;
-        let address = person.address;
-        let phone = person.phone;
-        let website = person.website;
         row = tbody.insertRow();
-        row.id = person.id;
-        let nameTd = row.insertCell(0).innerText = name;
-        let userNameTd = row.insertCell(1).innerText = userName;
-        let emailTd = row.insertCell(2).innerText = email;
-        let addressTd = row.insertCell(3).innerText = `${address.street} ${address.suite} ${address.city} ${address.zipcode}`;
-        let phoneTd = row.insertCell(4).innerText = phone;
-        let websiteTd = row.insertCell(5).innerText = website;
-        let buttonDel = document.createElement('button');
-        let buttonEdit = document.createElement('button');
-        buttonDel.innerText = "Delete";
-        buttonEdit.innerText = "Edit";
-        buttonDel.classList.add('delete');
-        buttonEdit.classList.add('edit');
-        buttonsTd = row.insertCell(6).appendChild(buttonDel);
-        buttonsTd = row.insertCell(6).appendChild(buttonEdit);
-        buttonDel.addEventListener('click', getDeleteListener(person.id));
-        buttonEdit.addEventListener('click', getEditListener(person.id));
+        fillRow(person, row)
     });
 }
 
-function getDeleteListener(id) {
-    return function removePerson(e) {
-        cache.forEach(function (person, i) {
+function fillRow(person, row) {
+    let name = person.name;
+    let userName = person.username;
+    let email = person.email;
+    let address = person.address;
+    let phone = person.phone;
+    let website = person.website;
+    row.id = person.id;
+    let nameTd = row.insertCell(0).innerText = name;
+    let userNameTd = row.insertCell(1).innerText = userName;
+    emailTd = row.insertCell(2);
+    emailTd.innerText = email;
+    let addressTd = row.insertCell(3).innerText = `${address.street} ${address.suite} ${address.city} ${address.zipcode}`;
+    let phoneTd = row.insertCell(4).innerText = phone;
+    let websiteTd = row.insertCell(5).innerText = website;
+    let buttonDel = document.createElement('button');
+    let buttonEdit = document.createElement('button');
+    let buttonCopy = document.createElement('button');
+    buttonCopy.innerText = '✂';
+    buttonCopy.classList.add('copy');
+    emailTd.appendChild(buttonCopy);
+    buttonDel.innerText = "Delete";
+    buttonEdit.innerText = "Edit";
+    buttonDel.classList.add('delete', 'danger');
+    buttonEdit.classList.add('edit', 'primary');
+    buttonsTd = row.insertCell(6);
+    buttonsTd.appendChild(buttonEdit);
+    buttonsTd.appendChild(buttonDel);
+    buttonDel.addEventListener('click', getDeleteListener(person.id, cache));
+    buttonEdit.addEventListener('click', getEditListener(person.id));
+    buttonCopy.addEventListener('click', getCopyListener(person.email));
+}
+
+function getDeleteListener(id, array) {
+    return function removePerson() {
+        array.forEach(function (person, i) {
             if (id === person.id) {
                 cache.splice(i, 1);
                 document.getElementById(id).remove();
@@ -59,13 +77,21 @@ function getDeleteListener(id) {
     }
 }
 
-let edit;
+
+function getCopyListener(email) {
+    return function copyEmail() {
+        takenEmail.value = email;
+        takenEmail.select();
+        document.execCommand('copy');
+    }
+}
+
 
 function getEditListener(id) {
     return function editPerson() {
         cache.forEach(function (person, i) {
             if (id === person.id) {
-                getNewValues();
+                editValues();
                 newName.value = person.name;
                 newStreet.value = person.address.street;
                 newSuite.value = person.address.suite;
@@ -91,15 +117,17 @@ function getEditListener(id) {
                         phone: newPhone.value,
                         website: newWebsite.value
                     };
-                    document.getElementById(id).remove();
-                    newRowRender([editedPerson]);
+                    var row = document.getElementById(id);
+                    var newRow = document.createElement('tr');
+                    tbody.insertBefore(newRow, row);
+                    fillRow(editedPerson, newRow);
+                    row.remove();
                 };
             }
         })
     }
 }
 
-getEditListener();
 
 function jsonp(url, callback) {
     let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
@@ -143,20 +171,22 @@ function createNewPerson() {
 
 
 function getNewValues() {
-    createPerson.classList.toggle("hidden");
-    saveBtn.classList.toggle("hidden");
-    editBtn.classList.toggle("hidden");
+    editBtn.classList.add("hidden");
+    saveBtn.classList.remove("hidden");
     modal.classList.toggle("visible");
-    addBtn.innerText = "close";
     (function () {
-        addBtn.addEventListener("click", function () {
-            if (this.innerText == "edit") {
-                addBtn.innerText = "close";
-            } else {
-                addBtn.innerText = "edit";
-            }
-        }, false);
+        createPerson.reset();
     })();
+}
+
+function editValues() {
+    saveBtn.classList.add("hidden");
+    editBtn.classList.remove("hidden");
+    modal.classList.toggle("visible");
+}
+
+function closeModal() {
+    modal.classList.remove("visible");
 }
 
 
