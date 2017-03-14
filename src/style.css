@@ -9,6 +9,10 @@ body {
     display: none;
 }
 
+.container{
+    max-width: 700px;
+    margin: auto;
+}
 
 .modal {
     position: fixed;
@@ -104,6 +108,7 @@ button.danger {
 button.copy{
     min-width: 0;
     height: auto;
+    float: left;
 }
 
 thead tr {
@@ -116,6 +121,7 @@ th {
 
 tr {
     border-bottom: 1px solid #eee;
+    height: 50px;
 }
 
 th, td {

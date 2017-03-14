@@ -31,6 +31,24 @@ function newRowRender(data) {
     });
 }
 
+function handleSearch() {
+    let search, filter, row, td, i;
+    search = document.getElementsByClassName('search')[0];
+    filter = search.value.toLowerCase();
+    row = tbody.getElementsByTagName('tr');
+    console.log(row);
+
+    for (i = 0; i < row.length; i++) {
+        td = [].slice.call(row[i].getElementsByTagName('td'));
+        console.log(td);
+        if ((td[0].innerText + td[1].innerText + td[2].innerText).toLowerCase().indexOf(filter) > -1) {
+            row[i].style.display = '';
+        } else {
+            row[i].style.display = 'none';
+        }
+    }
+}
+
 function fillRow(person, row) {
     let name = person.name;
     let userName = person.username;
@@ -164,9 +182,16 @@ function createNewPerson() {
         phone: newPhone.value,
         website: newWebsite.value
     };
-    cache.push(newPerson);
-    newRowRender([newPerson]);
-    console.log(cache);
+    
+    if (newName.validity.valueMissing ||
+        newUserName.validity.valueMissing||
+        newEmail.validity.valid) {
+        return false;
+    } else {
+        cache.push(newPerson);
+        newRowRender([newPerson]);
+        console.log(cache);
+    } 
 }
 
 
@@ -188,5 +213,7 @@ function editValues() {
 function closeModal() {
     modal.classList.remove("visible");
 }
+
+
 
 

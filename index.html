@@ -7,6 +7,9 @@
 </head>
 <body>
 <h1 align="center">Users</h1>
+<div class="container">
+    <input type="text" placeholder="Search..." oninput="handleSearch()" class="search">
+</div>
 <table style="width: 100%;">
     <thead>
     <tr>
@@ -30,19 +33,19 @@
         <form class="create-person">
             <div>
                 <strong>Name</strong>
-                <input class="name-field" type="text">
+                <input class="name-field" type="text" required>
             </div>
             <div>
                 <strong>User Name</strong>
-                <input class="username-field" type="text">
+                <input class="username-field" type="text" required>
             </div>
             <div>
                 <strong>E-mail</strong>
-                <input class="email-field" type="text">
+                <input class="email-field" name="email" type="email" required>
             </div>
             <div>
                 <strong>Phone</strong>
-                <input class="phone-field" type="text">
+                <input class="phone-field" type="phone">
             </div>
             <div>
                 <strong>Suite</strong>
@@ -54,7 +57,7 @@
             </div>
             <div>
                 <strong>Zipcode</strong>
-                <input class="zipcode-field" type="text">
+                <input class="zipcode-field" type="number">
             </div>
             <div>
                 <strong>Street</strong>
@@ -67,8 +70,8 @@
         </form>
         <div type="button" onclick="closeModal()" class="close-btn"></div>
         <div class="buttons-container">
-            <button type="button" onclick="createNewPerson()" class="save primary ">Save</button>
-            <button type="button" onclick="edit()" class="edit primary ">Edit</button>
+            <button type="submit" onclick="createNewPerson()" onsubmit="validateForms()" class="save primary ">Save</button>
+            <button type="submit" onclick="edit()" class="edit primary ">Edit</button>
         </div>
     </div>
 </div>
