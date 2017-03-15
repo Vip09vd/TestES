@@ -31,21 +31,21 @@
     <div class="modal-inner">
         <h1 align="center">Create new user</h1>
         <form class="create-person">
-            <div>
-                <strong>Name</strong>
-                <input class="name-field" type="text" required>
+            <div class="has-error">
+                <strong class="error-message">Name</strong>
+                <input class="name-field" type="text" name="name" required>
             </div>
-            <div>
-                <strong>User Name</strong>
-                <input class="username-field" type="text" required>
+            <div class="has-error">
+                <strong class="error-message">User Name</strong>
+                <input class="username-field" type="text" name="username" required>
             </div>
-            <div>
-                <strong>E-mail</strong>
+            <div class="has-error">
+                <strong class="error-message">E-mail</strong>
                 <input class="email-field" name="email" type="email" required>
             </div>
             <div>
                 <strong>Phone</strong>
-                <input class="phone-field" type="phone">
+                <input class="phone-field" name="phone" type="tel">
             </div>
             <div>
                 <strong>Suite</strong>
@@ -57,7 +57,7 @@
             </div>
             <div>
                 <strong>Zipcode</strong>
-                <input class="zipcode-field" type="number">
+                <input class="zipcode-field" type="text">
             </div>
             <div>
                 <strong>Street</strong>
@@ -70,7 +70,7 @@
         </form>
         <div type="button" onclick="closeModal()" class="close-btn"></div>
         <div class="buttons-container">
-            <button type="submit" onclick="createNewPerson()" onsubmit="validateForms()" class="save primary ">Save</button>
+            <button type="submit" onclick="createNewPerson()" onsubmit="validate()" class="save primary ">Save</button>
             <button type="submit" onclick="edit()" class="edit primary ">Edit</button>
         </div>
     </div>

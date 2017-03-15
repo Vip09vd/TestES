@@ -13,6 +13,9 @@ let newSuite = document.getElementsByClassName('suite-field')[0];
 let newCity = document.getElementsByClassName('city-field')[0];
 let newZipcode = document.getElementsByClassName('zipcode-field')[0];
 let newWebsite = document.getElementsByClassName('site-field')[0];
+newName.addEventListener('change', getValueListener(newName));
+newUserName.addEventListener('change', getValueListener(newUserName));
+newEmail.addEventListener('change', getValueListener(newEmail));
 let cache;
 let buttonsTd;
 let row;
@@ -182,18 +185,42 @@ function createNewPerson() {
         phone: newPhone.value,
         website: newWebsite.value
     };
-    
-    if (newName.validity.valueMissing ||
-        newUserName.validity.valueMissing||
-        newEmail.validity.valid) {
-        return false;
-    } else {
-        cache.push(newPerson);
-        newRowRender([newPerson]);
-        console.log(cache);
-    } 
+    validate(newPerson);
 }
 
+
+function validate(person) {
+    if (newName.validity.valueMissing ||
+        newUserName.validity.valueMissing ||
+        newEmail.validity.valid === false) {
+        return false;
+    } else {
+        for (let i = 0; i < cache.length; i++) {
+            if (cache[i].username === newUserName.value ||
+                cache[i].email === newEmail.value) {
+                return false;
+            }
+        }
+        cache.push(person);
+        newRowRender([person]);
+        console.log(cache);
+        return true;
+    }
+}
+
+function getValueListener(input) {
+    return function nameValue() {
+        let errorMsg = input.parentElement.getElementsByClassName('error-message')[0];
+        let errorLabel = errorMsg.innerText;
+        if (input.validationMessage == '') {
+            errorMsg.innerText = errorLabel;
+        } else {
+            errorMsg.innerText = input.validationMessage;
+            errorMsg.style.fontSize = '11px';
+            errorMsg.style.color = 'red';
+        }
+    }
+}
 
 function getNewValues() {
     editBtn.classList.add("hidden");
