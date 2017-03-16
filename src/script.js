@@ -30,8 +30,16 @@ takenEmail.style.width = '1px';
 function newRowRender(data) {
     data.forEach(function (person) {
         row = tbody.insertRow();
-        fillRow(person, row)
+        fillRow(person, row);
     });
+}
+
+function clear() {
+    let row = document.getElementsByTagName('tr');
+    for (let i = row.length - 1; i > 0; i--) {
+        console.log(row.length);
+        row[i].remove();
+    }
 }
 
 function handleSearch() {
@@ -138,8 +146,8 @@ function getEditListener(id) {
                         phone: newPhone.value,
                         website: newWebsite.value
                     };
-                    var row = document.getElementById(id);
-                    var newRow = document.createElement('tr');
+                    let row = document.getElementById(id);
+                    let newRow = document.createElement('tr');
                     tbody.insertBefore(newRow, row);
                     fillRow(editedPerson, newRow);
                     row.remove();
@@ -165,6 +173,7 @@ function jsonp(url, callback) {
 
 jsonp('http://www.mocky.io/v2/58aaea261000003f114b637d', function (data) {
     cache = data;
+    cache.sort(sortBy('name'));
     newRowRender(cache);
 });
 
@@ -186,12 +195,22 @@ function createNewPerson() {
         website: newWebsite.value
     };
     validate(newPerson);
+    console.log(cache);
+    clear();
+    newRowRender(cache);
+}
+
+function sortBy(prop) {
+    return function (a, b) {
+        return ((a[prop] < b[prop]) ? -1 : (a[prop] > b[prop]) ? 1 : 0);
+    }
 }
 
 
 function validate(person) {
     if (newName.validity.valueMissing ||
         newUserName.validity.valueMissing ||
+        newPhone.validity.typeMismatch ||
         newEmail.validity.valid === false) {
         return false;
     } else {
@@ -202,15 +221,15 @@ function validate(person) {
             }
         }
         cache.push(person);
-        newRowRender([person]);
-        console.log(cache);
+        cache.sort(sortBy('name'));
         return true;
     }
 }
 
 function getValueListener(input) {
     return function nameValue() {
-        let errorMsg = input.parentElement.getElementsByClassName('error-message')[0];
+        let errorMsg = input.previousElementSibling;
+        console.log(errorMsg);
         let errorLabel = errorMsg.innerText;
         if (input.validationMessage == '') {
             errorMsg.innerText = errorLabel;
@@ -240,6 +259,7 @@ function editValues() {
 function closeModal() {
     modal.classList.remove("visible");
 }
+
 
 
 
