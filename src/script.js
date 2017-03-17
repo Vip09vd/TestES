@@ -24,7 +24,7 @@ let emailTd;
 let takenEmail = document.createElement('input');
 document.body.appendChild(takenEmail);
 takenEmail.style.opacity = 0;
-takenEmail.style.width = '1px';
+takenEmail.style.width = '20px';
 
 
 function newRowRender(data) {
@@ -41,6 +41,7 @@ function clear() {
         row[i].remove();
     }
 }
+
 
 function handleSearch() {
     let search, filter, row, td, i;
@@ -204,6 +205,17 @@ function sortBy(prop) {
     return function (a, b) {
         return ((a[prop] < b[prop]) ? -1 : (a[prop] > b[prop]) ? 1 : 0);
     }
+}
+
+let reverse = false;
+
+function sortOnClick(prop) {
+    cache.sort(sortBy(prop));
+    if (reverse = !reverse){
+        cache.reverse();
+    }
+    clear();
+    newRowRender(cache);
 }
 
 

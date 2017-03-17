@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+*{
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Open Sans', sans-serif;
     letter-spacing: -0.75px;
@@ -44,7 +48,7 @@ body {
     right: 10px;
     width: 20px;
     height: 20px;
-    border: 4px solid #000;
+    border: 2px solid #000;
     border-radius: 50%;
     cursor: pointer;
     opacity: .6;
@@ -54,12 +58,13 @@ body {
 .close-btn:after {
     position: absolute;
     width: 20px;
-    height: 4px;
+    height: 2px;
     display: block;
     background-color: #000;
     opacity: .9;
     top: 50%;
-    margin-top: -2px;
+    margin-top: -1px;
+    left: -2px;
 
     content: '';
 }
