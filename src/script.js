@@ -1,3 +1,4 @@
+
 const tbody = document.getElementById('users-body');
 const addBtn = document.getElementsByClassName('add')[0];
 const createPerson = document.getElementsByClassName('create-person')[0];
@@ -21,14 +22,38 @@ let buttonsTd;
 let row;
 let edit;
 let emailTd;
+let maxId = 0;
 let takenEmail = document.createElement('input');
 document.body.appendChild(takenEmail);
 takenEmail.style.opacity = 0;
 takenEmail.style.width = '20px';
 
+function jsonp(url, callback) {
+    let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function (data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        callback(data);
+    };
+
+    let script = document.createElement('script');
+    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+    document.body.appendChild(script);
+}
+
+jsonp('http://www.mocky.io/v2/58aaea261000003f114b637d', function (data) {
+    cache = data.map(function (user) {
+        return new Person(user);
+    });
+    cache.sort(sortBy('name'));
+    newRowRender(cache);
+});
 
 function newRowRender(data) {
     data.forEach(function (person) {
+        if (person.id > maxId) {
+            maxId = person.id;
+        }
         row = tbody.insertRow();
         fillRow(person, row);
     });
@@ -117,6 +142,7 @@ function getCopyListener(email) {
 }
 
 
+
 function getEditListener(id) {
     return function editPerson() {
         cache.forEach(function (person, i) {
@@ -159,83 +185,35 @@ function getEditListener(id) {
 }
 
 
-function jsonp(url, callback) {
-    let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    window[callbackName] = function (data) {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        callback(data);
-    };
-
-    let script = document.createElement('script');
-    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-    document.body.appendChild(script);
-}
-
-jsonp('http://www.mocky.io/v2/58aaea261000003f114b637d', function (data) {
-    cache = data;
-    cache.sort(sortBy('name'));
-    newRowRender(cache);
-});
 
 
-function createNewPerson() {
-    let newId = cache[cache.length - 1].id + 1;
-    let newPerson = {
-        id: newId,
-        name: newName.value,
-        address: {
-            street: newStreet.value,
-            suite: newSuite.value,
-            city: newCity.value,
-            zipcode: newZipcode.value
-        },
-        username: newUserName.value,
-        email: newEmail.value,
-        phone: newPhone.value,
-        website: newWebsite.value
-    };
-    validate(newPerson);
-    console.log(cache);
-    clear();
-    newRowRender(cache);
-}
+
+
+
+
 
 function sortBy(prop) {
     return function (a, b) {
-        return ((a[prop] < b[prop]) ? -1 : (a[prop] > b[prop]) ? 1 : 0);
+        if (prop === 'street') {
+            return ((a.address[prop] === b.address[prop]) ? 0 : (a.address[prop] > b.address[prop]) ? 1 : -1);
+        } else {
+            var s1 = a[prop].toLowerCase();
+            var s2 = b[prop].toLowerCase();
+            return ((s1 === s2) ? 0 : (s1 > s2) ? 1 : -1);
+        }
     }
 }
+
 
 let reverse = false;
 
 function sortOnClick(prop) {
     cache.sort(sortBy(prop));
-    if (reverse = !reverse){
+    if (reverse = !reverse) {
         cache.reverse();
     }
     clear();
     newRowRender(cache);
-}
-
-
-function validate(person) {
-    if (newName.validity.valueMissing ||
-        newUserName.validity.valueMissing ||
-        newPhone.validity.typeMismatch ||
-        newEmail.validity.valid === false) {
-        return false;
-    } else {
-        for (let i = 0; i < cache.length; i++) {
-            if (cache[i].username === newUserName.value ||
-                cache[i].email === newEmail.value) {
-                return false;
-            }
-        }
-        cache.push(person);
-        cache.sort(sortBy('name'));
-        return true;
-    }
 }
 
 function getValueListener(input) {
@@ -272,7 +250,80 @@ function closeModal() {
     modal.classList.remove("visible");
 }
 
+class Person {
+    constructor(user) {
+        this.name = user.name;
+        this.id = maxId + 1;
+        this.companyId = user.companyId;
+        this.address = Object.assign({}, user.address);
+        this.username = user.username;
+        this.email = user.email;
+        this.phone = user.phone;
+        this.website = user.website;
+        console.log(this);
+    }
 
+    static save() {
+        const newUser = {
+            name: newName.value,
+            companyId: '',
+            address: {
+                street: newStreet.value,
+                suite: newSuite.value,
+                city: newCity.value,
+                zipcode: newZipcode.value
+            },
+            username: newUserName.value,
+            email: newEmail.value,
+            phone: newPhone.value,
+            website: newWebsite.value
+        };
+        const newPerson = new Person(newUser);
+        newPerson.validate();
+        clear();
+        newRowRender(cache);
+    }
 
+    validate() {
+        if (newName.validity.valueMissing ||
+            newUserName.validity.valueMissing ||
+            newPhone.validity.typeMismatch ||
+            newEmail.validity.valid === false) {
+            return false;
+        } else {
+            for (let i = 0; i < cache.length; i++) {
+                if (cache[i].username === this.username ||
+                    cache[i].email === this.email) {
+                    return false;
+                }
+            }
+            cache.push(this);
+            cache.sort(sortBy('name'));
+            createPerson.reset();
+            return true;
+        }
+    }
+}
 
+// function createNewPerson() {
+//     let newId = cache[cache.length - 1].id + 1;
+//     let newPerson = {
+//         id: newId,
+//         name: newName.value,
+//         address: {
+//             street: newStreet.value,
+//             suite: newSuite.value,
+//             city: newCity.value,
+//             zipcode: newZipcode.value
+//         },
+//         username: newUserName.value,
+//         email: newEmail.value,
+//         phone: newPhone.value,
+//         website: newWebsite.value
+//     };
+//     validate(newPerson);
+//     console.log(cache);
+//     clear();
+//     newRowRender(cache);
+// }
 

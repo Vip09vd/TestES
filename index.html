@@ -16,7 +16,7 @@
         <th style="cursor: pointer;" onclick="sortOnClick('name')">Name <span>▼</span></th>
         <th style="cursor: pointer;" onclick="sortOnClick('username')">User Name<span>▼</span></th>
         <th style="cursor: pointer;" onclick="sortOnClick('email')">E-mail<span>▼</span></th>
-        <th style="cursor: pointer;" onclick="sortOnClick('address.street')">Address<span>▼</span></th>
+        <th style="cursor: pointer;" onclick="sortOnClick('street')">Address<span>▼</span></th>
         <th>Phone</th>
         <th>Website</th>
         <th></th>
@@ -41,11 +41,11 @@
             </div>
             <div class="has-error">
                 <strong class="error-message">E-mail</strong>
-                <input class="email-field" name="email" type="email" required>
+                <input class="email-field" name="email" type="email"  pattern="[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z]{2,4}$" required>
             </div>
             <div>
                 <strong>Phone</strong>
-                <input class="phone-field" name="phone" type="tel">
+                <input class="phone-field" name="phone" pattern="2-[0-9]{3}-[0-9]{3}" type="tel" required>
             </div>
             <div>
                 <strong>Suite</strong>
@@ -65,12 +65,12 @@
             </div>
             <div>
                 <strong>Website</strong>
-                <input class="site-field" type="text">
+                <input class="site-field" pattern="[a-zA-Z0-9]+.[a-zA-Z]{2,4}$" type="text">
             </div>
         </form>
         <div type="button" onclick="closeModal()" class="close-btn"></div>
         <div class="buttons-container">
-            <button type="submit" onclick="createNewPerson()" onsubmit="validate()" class="save primary ">Save</button>
+            <button type="submit" onclick="Person.save()" class="save primary ">Save</button>
             <button type="submit" onclick="edit()" class="edit primary ">Edit</button>
         </div>
     </div>
