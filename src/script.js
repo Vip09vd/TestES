@@ -1,4 +1,3 @@
-
 const tbody = document.getElementById('users-body');
 const addBtn = document.getElementsByClassName('add')[0];
 const createPerson = document.getElementsByClassName('create-person')[0];
@@ -142,63 +141,15 @@ function getCopyListener(email) {
 }
 
 
-
-function getEditListener(id) {
-    return function editPerson() {
-        cache.forEach(function (person, i) {
-            if (id === person.id) {
-                editValues();
-                newName.value = person.name;
-                newStreet.value = person.address.street;
-                newSuite.value = person.address.suite;
-                newCity.value = person.address.city;
-                newZipcode.value = person.address.zipcode;
-                newUserName.value = person.username;
-                newEmail.value = person.email;
-                newPhone.value = person.phone;
-                newWebsite.value = person.website;
-                edit = function EditedValues() {
-                    let editedPerson = cache[i] = {
-                        name: newName.value,
-                        id: person.id,
-                        companyId: person.companyId,
-                        address: {
-                            street: newStreet.value,
-                            suite: newSuite.value,
-                            city: newCity.value,
-                            zipcode: newZipcode.value
-                        },
-                        username: newUserName.value,
-                        email: newEmail.value,
-                        phone: newPhone.value,
-                        website: newWebsite.value
-                    };
-                    let row = document.getElementById(id);
-                    let newRow = document.createElement('tr');
-                    tbody.insertBefore(newRow, row);
-                    fillRow(editedPerson, newRow);
-                    row.remove();
-                };
-            }
-        })
-    }
-}
-
-
-
-
-
-
-
-
-
 function sortBy(prop) {
     return function (a, b) {
         if (prop === 'street') {
-            return ((a.address[prop] === b.address[prop]) ? 0 : (a.address[prop] > b.address[prop]) ? 1 : -1);
+            let s1 = a.address[prop].toLowerCase();
+            let s2 = b.address[prop].toLowerCase();
+            return ((s1 === s2) ? 0 : (s1 > s2) ? 1 : -1);
         } else {
-            var s1 = a[prop].toLowerCase();
-            var s2 = b[prop].toLowerCase();
+            let s1 = a[prop].toLowerCase();
+            let s2 = b[prop].toLowerCase();
             return ((s1 === s2) ? 0 : (s1 > s2) ? 1 : -1);
         }
     }
@@ -253,19 +204,19 @@ function closeModal() {
 class Person {
     constructor(user) {
         this.name = user.name;
-        this.id = maxId + 1;
+        this.id = user.id;
         this.companyId = user.companyId;
         this.address = Object.assign({}, user.address);
         this.username = user.username;
         this.email = user.email;
         this.phone = user.phone;
         this.website = user.website;
-        console.log(this);
     }
 
     static save() {
         const newUser = {
             name: newName.value,
+            id: maxId + 1,
             companyId: '',
             address: {
                 street: newStreet.value,
@@ -282,6 +233,27 @@ class Person {
         newPerson.validate();
         clear();
         newRowRender(cache);
+    }
+
+    edit() {
+        this.name = newName.value;
+        this.companyId = '';
+        this.address = {
+            street: newStreet.value,
+            suite: newSuite.value,
+            city: newCity.value,
+            zipcode: newZipcode.value
+        };
+        this.username = newUserName.value;
+        this.email = newEmail.value;
+        this.phone = newPhone.value;
+        this.website = newWebsite.value;
+
+        let row = document.getElementById(this.id);
+        let newRow = document.createElement('tr');
+        tbody.insertBefore(newRow, row);
+        fillRow(this, newRow);
+        row.remove();
     }
 
     validate() {
@@ -305,25 +277,25 @@ class Person {
     }
 }
 
-// function createNewPerson() {
-//     let newId = cache[cache.length - 1].id + 1;
-//     let newPerson = {
-//         id: newId,
-//         name: newName.value,
-//         address: {
-//             street: newStreet.value,
-//             suite: newSuite.value,
-//             city: newCity.value,
-//             zipcode: newZipcode.value
-//         },
-//         username: newUserName.value,
-//         email: newEmail.value,
-//         phone: newPhone.value,
-//         website: newWebsite.value
-//     };
-//     validate(newPerson);
-//     console.log(cache);
-//     clear();
-//     newRowRender(cache);
-// }
+function getEditListener(id) {
+    return function editPerson() {
+        cache.forEach(function (person) {
+            if (id === person.id) {
+                editValues();
+                newName.value = person.name;
+                newStreet.value = person.address.street;
+                newSuite.value = person.address.suite;
+                newCity.value = person.address.city;
+                newZipcode.value = person.address.zipcode;
+                newUserName.value = person.username;
+                newEmail.value = person.email;
+                newPhone.value = person.phone;
+                newWebsite.value = person.website;
+                id = person.id;
+                edit = person.edit.bind(person);
+            }
+        })
+    }
+}
+
 
