@@ -1,4 +1,5 @@
 import './style.css'
+import  jsonp  from './components/xhr';
 
 const tbody = document.getElementById('users-body');
 const addBtn = document.getElementsByClassName('add')[0];
@@ -29,26 +30,18 @@ document.body.appendChild(takenEmail);
 takenEmail.style.opacity = 0;
 takenEmail.style.width = '20px';
 
-function jsonp(url, callback) {
-    let callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    window[callbackName] = function (data) {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        callback(data);
-    };
 
-    let script = document.createElement('script');
-    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-    document.body.appendChild(script);
-}
+const users = 'http://www.mocky.io/v2/58aaea261000003f114b637d';
 
-jsonp('http://www.mocky.io/v2/58aaea261000003f114b637d', function (data) {
-    cache = data.map(function (user) {
+
+jsonp(users, function (data) {
+    data.map(function (user) {
         return new Person(user);
     });
-    cache.sort(sortBy('name'));
-    newRowRender(cache);
+    data.sort(sortBy('name'));
+    newRowRender(data);
 });
+
 
 function newRowRender(data) {
     data.forEach(function (person) {
@@ -68,24 +61,6 @@ function clear() {
     }
 }
 
-
-window.handleSearch = function handleSearch() {
-    let search, filter, row, td, i;
-    search = document.getElementsByClassName('search')[0];
-    filter = search.value.toLowerCase();
-    row = tbody.getElementsByTagName('tr');
-    console.log(row);
-
-    for (i = 0; i < row.length; i++) {
-        td = [].slice.call(row[i].getElementsByTagName('td'));
-        console.log(td);
-        if ((td[0].innerText + td[1].innerText + td[2].innerText).toLowerCase().indexOf(filter) > -1) {
-            row[i].style.display = '';
-        } else {
-            row[i].style.display = 'none';
-        }
-    }
-}
 
 function fillRow(person, row) {
     let name = person.name;
