@@ -1,3 +1,5 @@
+import './style.css'
+
 const tbody = document.getElementById('users-body');
 const addBtn = document.getElementsByClassName('add')[0];
 const createPerson = document.getElementsByClassName('create-person')[0];
@@ -67,7 +69,7 @@ function clear() {
 }
 
 
-function handleSearch() {
+window.handleSearch = function handleSearch() {
     let search, filter, row, td, i;
     search = document.getElementsByClassName('search')[0];
     filter = search.value.toLowerCase();
