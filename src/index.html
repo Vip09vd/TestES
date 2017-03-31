@@ -5,77 +5,7 @@
     <title>ES6</title>
 </head>
 <body>
-<h1 align="center">Users</h1>
-<div class="container">
-    <input type="text" placeholder="Search..." oninput="handleSearch()" class="search">
-</div>
-<table style="width: 100%;">
-    <thead>
-    <tr>
-        <th style="cursor: pointer;" onclick="sortOnClick('name')">Name <span>▼</span></th>
-        <th style="cursor: pointer;" onclick="sortOnClick('username')">User Name<span>▼</span></th>
-        <th style="cursor: pointer;" onclick="sortOnClick('email')">E-mail<span>▼</span></th>
-        <th style="cursor: pointer;" onclick="sortOnClick('street')">Address<span>▼</span></th>
-        <th>Phone</th>
-        <th>Website</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody id="users-body">
-
-    </tbody>
-</table>
-
-<div class="modal">
-    <div class="modal-inner">
-        <h1 align="center">Create new user</h1>
-        <form class="create-person">
-            <div class="has-error">
-                <strong class="error-message">Name</strong>
-                <input class="name-field" type="text" name="name" required>
-            </div>
-            <div class="has-error">
-                <strong class="error-message">User Name</strong>
-                <input class="username-field" type="text" name="username" required>
-            </div>
-            <div class="has-error">
-                <strong class="error-message">E-mail</strong>
-                <input class="email-field" name="email" type="email"  pattern="[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z]{2,4}$" required>
-            </div>
-            <div>
-                <strong>Phone</strong>
-                <input class="phone-field" name="phone" pattern="2-[0-9]{3}-[0-9]{3}" type="tel" required>
-            </div>
-            <div>
-                <strong>Suite</strong>
-                <input class="suite-field" name="suite" type="text">
-            </div>
-            <div>
-                <strong>City</strong>
-                <input class="city-field" name="city" type="text">
-            </div>
-            <div>
-                <strong>Zipcode</strong>
-                <input class="zipcode-field" name="zipcode" type="text">
-            </div>
-            <div>
-                <strong>Street</strong>
-                <input class="street-field" name="street" type="text">
-            </div>
-            <div>
-                <strong>Website</strong>
-                <input class="site-field" name="website" pattern="[a-zA-Z0-9]+.[a-zA-Z]{2,4}$" type="text">
-            </div>
-        </form>
-        <div type="button" onclick="closeModal()" class="close-btn"></div>
-        <div class="buttons-container">
-            <button type="submit" onclick="Person.save()" class="save primary ">Save</button>
-            <button type="submit" onclick="edit()" class="edit primary ">Edit</button>
-        </div>
-    </div>
-</div>
-<div class="buttons-container">
-    <button type="button" onclick="getNewValues()" class="add primary">Add New</button>
+<div id="root">
 </div>
 <script src="./assets/app.bundle.js"></script>
 </body>
