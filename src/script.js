@@ -49,50 +49,85 @@ const root = document.getElementById('root');
 // }
 
 class App {
-    static render(component, element) {
-        element.innerHTML = component.render();
+    constructor(component, element){
+        this.component = component;
+        this.element = element;
+    }
+    render() {
+        this.element.innerHTML = '';
+        this.element.appendChild(this.component.render());
     }
 }
 
 class InputWithText {
-    constructor(){
-
+    constructor() {
+        this.div = document.createElement('div');
+        this.value = '';
     }
 
-    handleInput(e) {
-        const value = e.target.value;
-        console.log(value);
+    handleInput(event) {
+        const value = event.target.value;
+        this.value = value;
+        publisher.publish();
     }
 
     render() {
+        this.div.innerHTML = '';
         const text = new Text('input');
-        const input = new Input('text', this.handleInput);
-        const text2 = new Text('lll');
-        return `<div>
-            ${text.render()}
-            ${input.render()}
-            ${text2.render()}
-         </div>`
+        const input = new Input('text', this.handleInput, this.value);
+        const text2 = new Text(this.value);
+        this.div.appendChild(text.render());
+        this.div.appendChild(input.render());
+        this.div.appendChild(text2.render());
+        return this.div;
     }
 }
 
 class Text {
-    constructor(text){
+    constructor(text) {
         this.text = text;
+        this.div = document.createElement('div');
+        this.div.innerText = this.text;
     }
+
     render() {
-        return `<div>${this.text}</div>`;
+        return this.div;
     }
 }
 
 class Input {
-    constructor(type, onInput) {
+    constructor(type, onInput, value) {
         this.type = type;
         this.onInput = onInput;
+        this.input = document.createElement('input');
+        this.input.setAttribute('type', this.type);
+        this.input.setAttribute('value', value);
+        this.input.addEventListener('input', (e) => this.onInput(e));
     }
+
     render() {
-        return `<input oninput="${this.onInput()}" type="${this.type}"/>`;
+        return this.input;
     }
 }
 
-App.render(new InputWithText(), root);
+class Publisher {
+    constructor() {
+        this.subscribers = [];
+    }
+
+    subscribe(callback) {
+        this.subscribers.push(callback);
+    }
+
+    publish() {
+        this.subscribers.forEach(function (subscriber) {
+            subscriber();
+        })
+    }
+}
+
+const publisher = new Publisher();
+const app = new App(new InputWithText(), root);
+app.render();
+publisher.subscribe(app.render.bind(app));
+// App.render(new InputWithText(), root);
