@@ -54,8 +54,9 @@ class App {
         this.element = element;
     }
     render() {
+        const newChild = this.component.render();
         this.element.innerHTML = '';
-        this.element.appendChild(this.component.render());
+        this.element.appendChild(newChild);
     }
 }
 
@@ -65,11 +66,10 @@ class InputWithText {
         this.value = '';
     }
 
-    handleInput(event) {
-        const value = event.target.value;
-        this.value = value;
+    handleInput = (event) => {
+        this.value = event.target.value;
         publisher.publish();
-    }
+    };
 
     render() {
         this.div.innerHTML = '';
@@ -130,4 +130,3 @@ const publisher = new Publisher();
 const app = new App(new InputWithText(), root);
 app.render();
 publisher.subscribe(app.render.bind(app));
-// App.render(new InputWithText(), root);
